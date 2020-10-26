@@ -9,4 +9,4 @@ COPY [".", "/usr/src/test"]
 
 EXPOSE 9000
 
-CMD ["node", "index.js"]
+CMD ["npm", "start"]

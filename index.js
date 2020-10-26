@@ -5,8 +5,6 @@ function sleep(ms) {
 }
 
 const test = async () => {
-  await sleep(10000);
-
   const pool = mysql.createPool({
     host: "mysql",
     user: "root",
@@ -14,6 +12,7 @@ const test = async () => {
   });
 
   const connection = await pool.getConnection();
+
   connection.query(`DROP SCHEMA IF EXISTS test;`);
   connection.query(`CREATE SCHEMA test;`);
   connection.query(`use test;`);
