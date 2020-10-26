@@ -7,12 +7,13 @@ function sleep(ms) {
 const test = async () => {
   await sleep(10000);
 
-  const connection = await mysql.createConnection({
+  const pool = mysql.createPool({
     host: "mysql",
     user: "root",
     password: "1234",
   });
 
+  const connection = await pool.getConnection();
   connection.query(`DROP SCHEMA IF EXISTS test;`);
   connection.query(`CREATE SCHEMA test;`);
   connection.query(`use test;`);
@@ -26,7 +27,11 @@ const test = async () => {
   INSERT INTO test (name)
     VALUES ('John'),('Peter');`);
 
+  await connection.beginTransaction();
+
   const [rows] = await connection.execute("SELECT * FROM test WHERE name = ?", ["John"]);
+  await connection.commit();
+  connection.release();
 
   console.log(rows);
 };
